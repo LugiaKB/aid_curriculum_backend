@@ -43,7 +43,12 @@ pip install -r requirements.txt
 
 ### Development Server
 
-Start the development server with hot-reload:
+**Quick Start (Linux/Mac):**
+```bash
+./run.sh
+```
+
+Or manually start the development server with hot-reload:
 
 ```bash
 uvicorn app.main:app --reload
