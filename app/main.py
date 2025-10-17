@@ -11,6 +11,8 @@ app = FastAPI(
 )
 
 # Configure CORS
+# Note: In production, replace allow_origins=["*"] with specific origins
+# Using "*" with allow_credentials=True is a security risk
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # In production, specify actual origins
@@ -26,6 +28,7 @@ resumes_store: Dict[str, ResumeData] = {}
 @app.get("/")
 async def root():
     """Root endpoint"""
+    # Note: This endpoints list is hardcoded. For a dynamic list, use app.routes
     return {
         "message": "Welcome to AID Curriculum Backend API",
         "version": "1.0.0",
@@ -54,6 +57,7 @@ async def create_resume(resume_data: ResumeData):
     return ResumeResponse(
         status="success",
         message=f"Resume created successfully with ID: {resume_id}",
+        resume_id=resume_id,
         data=resume_data
     )
 
@@ -76,6 +80,7 @@ async def get_resume(resume_id: str):
     return ResumeResponse(
         status="success",
         message="Resume retrieved successfully",
+        resume_id=resume_id,
         data=resume_data
     )
 
@@ -99,6 +104,7 @@ async def update_resume(resume_id: str, resume_data: ResumeData):
     return ResumeResponse(
         status="success",
         message="Resume updated successfully",
+        resume_id=resume_id,
         data=resume_data
     )
 

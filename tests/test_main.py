@@ -103,9 +103,8 @@ def test_get_resume(client):
     create_response = client.post("/resume", json=resume_data)
     assert create_response.status_code == 201
     
-    # Extract resume ID from the message
-    message = create_response.json()["message"]
-    resume_id = message.split("ID: ")[1]
+    # Extract resume ID from the response
+    resume_id = create_response.json()["resume_id"]
     
     # Now retrieve it
     get_response = client.get(f"/resume/{resume_id}")
@@ -131,8 +130,7 @@ def test_update_resume(client):
     }
     
     create_response = client.post("/resume", json=resume_data)
-    message = create_response.json()["message"]
-    resume_id = message.split("ID: ")[1]
+    resume_id = create_response.json()["resume_id"]
     
     # Update the resume
     updated_data = {
@@ -169,8 +167,7 @@ def test_delete_resume(client):
     }
     
     create_response = client.post("/resume", json=resume_data)
-    message = create_response.json()["message"]
-    resume_id = message.split("ID: ")[1]
+    resume_id = create_response.json()["resume_id"]
     
     # Delete the resume
     delete_response = client.delete(f"/resume/{resume_id}")

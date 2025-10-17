@@ -82,4 +82,5 @@ class ResumeResponse(BaseModel):
     """Response model for resume endpoints"""
     status: str = Field(..., description="Status of the request")
     message: str = Field(..., description="Response message")
+    resume_id: Optional[str] = Field(None, description="Resume ID")
     data: ResumeData = Field(..., description="Resume data")
