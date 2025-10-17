@@ -160,7 +160,7 @@ Generate the resume in Markdown format, making it compelling and ATS-friendly.""
             )
             
             # Validate response
-            if not response.choices or len(response.choices) == 0:
+            if not response.choices:
                 logger.warning("OpenAI returned empty response, using fallback")
                 return self._generate_basic_resume(request)
             
