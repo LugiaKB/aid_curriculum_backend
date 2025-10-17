@@ -71,6 +71,22 @@ Once the server is running, you can access:
 - **Interactive API Documentation (Swagger UI)**: http://localhost:8000/docs
 - **Alternative API Documentation (ReDoc)**: http://localhost:8000/redoc
 
+## Examples
+
+Sample resume JSON files are provided in the `examples/` directory:
+
+- `examples/sample_resume.json` - A comprehensive resume with all fields populated
+- `examples/minimal_resume.json` - A minimal resume with only required fields
+
+You can use these examples to test the API:
+
+```bash
+# Create a resume using the sample file
+curl -X POST http://localhost:8000/resume \
+  -H "Content-Type: application/json" \
+  -d @examples/sample_resume.json
+```
+
 ## API Endpoints
 
 ### Root Endpoint
