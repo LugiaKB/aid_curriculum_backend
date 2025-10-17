@@ -1,8 +1,12 @@
 from typing import List, Optional
 import json
+import logging
 from app.models import ResumeData, ResumeGenerationRequest
 from app.config import settings
 from openai import OpenAI
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class AIResumeService:
@@ -155,7 +159,17 @@ Generate the resume in Markdown format, making it compelling and ATS-friendly.""
                 max_tokens=settings.openai_max_tokens
             )
             
-            markdown_content = response.choices[0].message.content.strip()
+            # Validate response
+            if not response.choices or len(response.choices) == 0:
+                logger.warning("OpenAI returned empty response, using fallback")
+                return self._generate_basic_resume(request)
+            
+            content = response.choices[0].message.content
+            if not content:
+                logger.warning("OpenAI returned empty content, using fallback")
+                return self._generate_basic_resume(request)
+            
+            markdown_content = content.strip()
             
             # Generate suggestions
             suggestions = self._generate_suggestions(request.resume_data)
@@ -168,7 +182,7 @@ Generate the resume in Markdown format, making it compelling and ATS-friendly.""
         
         except Exception as e:
             # Fallback to basic resume on error
-            print(f"Error generating resume with AI: {e}")
+            logger.error(f"Error generating resume with AI: {e}")
             return self._generate_basic_resume(request)
     
     def _generate_basic_resume(self, request: ResumeGenerationRequest) -> dict:
