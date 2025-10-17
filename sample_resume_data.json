@@ -1,0 +1,94 @@
+{
+  "resume_data": {
+    "personal_info": {
+      "full_name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1-234-567-8900",
+      "location": "San Francisco, CA",
+      "linkedin": "https://linkedin.com/in/johndoe",
+      "github": "https://github.com/johndoe",
+      "website": "https://johndoe.dev",
+      "summary": "Experienced software engineer with 5+ years in full-stack development, specializing in Python, JavaScript, and cloud technologies. Proven track record of delivering scalable solutions and leading technical teams."
+    },
+    "education": [
+      {
+        "institution": "Stanford University",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Computer Science",
+        "start_date": "2015-09",
+        "end_date": "2019-06",
+        "gpa": "3.8/4.0",
+        "achievements": [
+          "Dean's List all semesters",
+          "President of Computer Science Club",
+          "Published research on machine learning algorithms"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "company": "Tech Corp",
+        "position": "Senior Software Engineer",
+        "location": "San Francisco, CA",
+        "start_date": "2020-01",
+        "end_date": "Present",
+        "responsibilities": [
+          "Led development of microservices architecture serving 1M+ daily active users",
+          "Improved system performance by 40% through database optimization and caching strategies",
+          "Mentored team of 5 junior engineers, conducting code reviews and technical workshops",
+          "Implemented CI/CD pipelines reducing deployment time from hours to minutes",
+          "Collaborated with product team to define technical requirements for new features"
+        ]
+      },
+      {
+        "company": "StartupXYZ",
+        "position": "Full Stack Developer",
+        "location": "Palo Alto, CA",
+        "start_date": "2019-07",
+        "end_date": "2019-12",
+        "responsibilities": [
+          "Built and launched MVP for SaaS platform used by 50+ beta customers",
+          "Developed RESTful APIs using Python FastAPI and PostgreSQL",
+          "Created responsive frontend using React and TypeScript",
+          "Integrated payment processing with Stripe API",
+          "Reduced page load time by 60% through code optimization"
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "category": "Programming Languages",
+        "items": ["Python", "JavaScript", "TypeScript", "Go", "SQL"]
+      },
+      {
+        "category": "Frameworks & Libraries",
+        "items": ["FastAPI", "Django", "React", "Node.js", "Express", "Vue.js"]
+      },
+      {
+        "category": "Cloud & DevOps",
+        "items": ["AWS", "Docker", "Kubernetes", "GitHub Actions", "Terraform"]
+      },
+      {
+        "category": "Databases",
+        "items": ["PostgreSQL", "MongoDB", "Redis", "DynamoDB"]
+      },
+      {
+        "category": "Tools & Others",
+        "items": ["Git", "Jira", "Postman", "VS Code", "Linux"]
+      }
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect - Associate (2022)",
+      "Google Cloud Professional Cloud Architect (2021)",
+      "MongoDB Certified Developer (2020)"
+    ],
+    "languages": [
+      "English (Native)",
+      "Spanish (Intermediate)",
+      "Mandarin (Basic)"
+    ]
+  },
+  "target_role": "Senior Full Stack Engineer",
+  "tone": "professional",
+  "format_style": "modern"
+}
