@@ -1,5 +1,11 @@
 # AI Resume Builder Backend
 
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-00C7B7?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--3.5-412991?style=flat&logo=openai)](https://openai.com)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A FastAPI-based backend with AI integration for intelligent resume building and analysis.
 
 ## Features
@@ -201,6 +207,50 @@ The API provides interactive testing through Swagger UI at `/docs`.
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## Quick Reference
+
+### Start the Server
+```bash
+python main.py
+# or
+./run_server.sh
+# or with Docker
+docker-compose up
+```
+
+### Access the API
+- **API**: http://localhost:8000
+- **Docs**: http://localhost:8000/docs
+- **Health**: http://localhost:8000/health
+
+### Common Operations
+```bash
+# Generate resume content
+curl -X POST http://localhost:8000/api/resumes/generate \
+  -H "Content-Type: application/json" \
+  -d '{"job_description": "Python developer", "experience_level": "mid-level"}'
+
+# Analyze resume
+curl -X POST http://localhost:8000/api/resumes/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"resume_content": "Your resume text..."}'
+
+# Create resume
+curl -X POST http://localhost:8000/api/resumes/ \
+  -H "Content-Type: application/json" \
+  -d '{"full_name": "John Doe", "contact": {"email": "john@example.com"}}'
+```
+
+## Documentation
+
+- 📚 **[Quick Start Guide](QUICKSTART.md)** - Get up and running in 5 minutes
+- 📖 **[API Documentation](API_DOCS.md)** - Complete API reference with examples
+- 🏗️ **[Architecture Overview](ARCHITECTURE.md)** - System design and architecture
+- 🚀 **[Deployment Guide](DEPLOYMENT.md)** - Production deployment instructions
+- 🔧 **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues and solutions
+- 🤝 **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute
+- 📋 **[Project Summary](PROJECT_SUMMARY.md)** - Complete feature overview
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a Pull Request.
