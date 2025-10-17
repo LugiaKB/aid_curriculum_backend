@@ -69,7 +69,7 @@ class GeminiClient:
             response = self.model.generate_content(prompt, **kwargs)
             return response.text
         except Exception as e:
-            raise Exception(f"Failed to generate content: {str(e)}")
+            raise Exception(f"Failed to generate content: {str(e)}") from e
     
     def generate_content_stream(
         self,
@@ -95,7 +95,7 @@ class GeminiClient:
                 if chunk.text:
                     yield chunk.text
         except Exception as e:
-            raise Exception(f"Failed to generate streaming content: {str(e)}")
+            raise Exception(f"Failed to generate streaming content: {str(e)}") from e
     
     def chat(
         self,
@@ -146,7 +146,7 @@ class ChatSession:
             response = self.chat.send_message(message, **kwargs)
             return response.text
         except Exception as e:
-            raise Exception(f"Failed to send message: {str(e)}")
+            raise Exception(f"Failed to send message: {str(e)}") from e
     
     def get_history(self) -> List[Dict[str, str]]:
         """
