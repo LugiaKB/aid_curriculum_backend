@@ -9,9 +9,11 @@ class GeminiClient:
     def __init__(self, model: str = "gemini-2.5-flash"):
 
         try:
-            api_key = (
-                os.getenv("GEMINI_API_KEY") or "AIzaSyDYX4im2Y5YZbZoMJHuAr8o3cJG_Bju22c"
-            )
+            api_key = os.getenv("GOOGLE_API_KEY")
+            if not api_key:
+                raise ValueError(
+                    "GOOGLE_API_KEY não encontrada nas variáveis de ambiente."
+                )
             if not api_key:
                 raise ValueError(
                     "GEMINI_API_KEY não encontrado nas variáveis de ambiente."
