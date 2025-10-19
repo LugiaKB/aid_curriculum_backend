@@ -1,63 +1,64 @@
-# CV Generator API
+# Gerador de Currículos API
 
-A simple FastAPI application that generates professional CVs using Google's Gemini AI.
+Uma aplicação FastAPI que gera currículos profissionais utilizando a IA Gemini do Google.
 
-## Setup
+## Configuração
 
-1. Install pipenv if you haven't already:
+1. Instale o pipenv se ainda não tiver instalado:
 ```bash
 pip install pipenv
 ```
 
-2. Install dependencies:
+2. Copie o arquivo `.env.example` para `.env` e adicione sua chave de API do Google:
+```bash
+GOOGLE_API_KEY=sua_chave_api_aqui
+```
+
+3. Instale as dependências:
 ```bash
 pipenv install
 ```
 
-3. Copy `.env.example` to `.env` and add your Google API key:
-```bash
-GOOGLE_API_KEY=your_api_key_here
-```
+4. Execute a aplicação:
 
-4. Run the application:
-
-To start the API server:
+Para iniciar o servidor da API:
 ```bash
 pipenv run api
 ```
-The API will be available at `http://localhost:8000`
+A API estará disponível em `http://localhost:8000`
 
-To test CV generation locally with example data:
+Para testar a geração de currículos localmente com dados de exemplo:
 ```bash
 pipenv run generate
 ```
 
-## API Usage
+## Uso da API
 
-Send a POST request to `/generate-cv` with the following JSON structure:
+Envie uma requisição POST para `/api/v1/generate-cv` com a seguinte estrutura JSON:
 
 ```json
 {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone": "+1234567890",
-    "summary": "Experienced software developer...",
-    "education": [
-        "BS in Computer Science, University XYZ, 2018-2022"
-    ],
-    "experience": [
-        "Software Developer at Company ABC, 2022-Present"
-    ],
-    "skills": [
-        "Python",
-        "FastAPI",
-        "Machine Learning"
-    ]
+  "full_name": "Maria Silva Santos",
+  "desired_role": "Desenvolvedora Full Stack",
+  "email": "mariasilva@email.com",
+  "phone": "11987654321",
+  "professional_experience": "Experiência como desenvolvedora...",
+  "education": "Formação acadêmica...",
+  "skills": "Habilidades técnicas e soft skills...",
+  "target_job_description": "Descrição da vaga desejada (opcional)"
 }
 ```
 
-## API Documentation
+## Documentação da API
 
-Once the server is running, you can access:
-- Swagger UI documentation at: `http://localhost:8000/docs`
-- ReDoc documentation at: `http://localhost:8000/redoc`
+Depois que o servidor estiver rodando, você pode acessar:
+- Documentação Swagger UI em: `http://localhost:8000/docs`
+- Documentação ReDoc em: `http://localhost:8000/redoc`
+
+## Exemplo de Resposta
+
+A API retorna um JSON contendo:
+- Currículo gerado em formato estruturado
+- Análise de compatibilidade com a vaga (quando fornecida)
+- Sugestões de melhorias
+- Recursos de aprendizado recomendados
