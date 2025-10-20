@@ -1,28 +1,22 @@
-import os
 import json
 from google import genai
 from google.genai import types
 from google.genai.errors import APIError
+from app.core.settings import get_settings
 
 
 class GeminiClient:
-    def __init__(self, model: str = "gemini-2.5-flash"):
-
+    def __init__(self, model: str = None, api_key: str = None):
         try:
-            api_key = os.getenv("GOOGLE_API_KEY")
-            if not api_key:
+            settings = get_settings()
+            self.model = model or getattr(settings, "gemini_model", "gemini-2.5-flash")
+            self.api_key = api_key or getattr(settings, "google_api_key", None)
+            if not self.api_key:
                 raise ValueError(
-                    "GOOGLE_API_KEY não encontrada nas variáveis de ambiente."
+                    "GOOGLE_API_KEY não encontrada nas variáveis de ambiente ou settings."
                 )
-            if not api_key:
-                raise ValueError(
-                    "GEMINI_API_KEY não encontrado nas variáveis de ambiente."
-                )
-            self.client = genai.Client(api_key=api_key)
-            self.model = model
-
+            self.client = genai.Client(api_key=self.api_key)
         except Exception as e:
-
             print(f"Erro ao inicializar o Gemini Client: {e}")
             self.client = None
             raise

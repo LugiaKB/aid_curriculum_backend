@@ -1,6 +1,10 @@
+import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router
+from app.core.settings import get_settings
+
+settings = get_settings()
 
 app = FastAPI(
     title="CV Generator API",
@@ -39,6 +43,18 @@ async def root():
 
 
 if __name__ == "__main__":
+    # Validate that the GOOGLE_API_KEY is set before starting the server
+    if not settings.google_api_key:
+        print("ERROR: GOOGLE_API_KEY não encontrada nas variáveis de ambiente.")
+        print(
+            "1) Copie .env.example para .env e adicione sua key:\n   cp .env.example .env\n   (edite .env e defina GOOGLE_API_KEY=SUACHAVE)"
+        )
+        print(
+            "2) Ou exporte no shell temporariamente:\n   export GOOGLE_API_KEY=SUACHAVE"
+        )
+        print("3) Inicie com pipenv para garantir o .env carregado:\n   pipenv run api")
+        sys.exit(1)
+
     import uvicorn
 
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
