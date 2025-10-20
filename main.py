@@ -7,8 +7,8 @@ from app.core.settings import get_settings
 settings = get_settings()
 
 app = FastAPI(
-    title="CV Generator API",
-    description="API for generating CVs using Google's Gemini AI",
+    title="AId Curriculum API",
+    description="API para geração de currículos utilizando um modelo de LLM avançado.",
     version="0.1.0",
 )
 
