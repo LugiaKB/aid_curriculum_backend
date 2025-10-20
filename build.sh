@@ -1,8 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# exit on error
-set -o errexit
+# Aborta imediatamente se algum comando falhar
+set -e
 
-# Instala as dependências do Pipfile diretamente no ambiente do sistema
+echo "--- 1. Instalando Pipenv globalmente ---"
+# Instala o Pipenv no ambiente de build
 pip install pipenv
-pipenv install --system --deploy
+
+echo "--- 2. Instalando dependências do Pipenv ---"
+# Instala as dependências usando o Pipfile.lock (modo deploy)
+# Garante que as dependências sejam as definidas no lock file
+pipenv install --deploy
+
+# Opcional: Limpa o cache do pip para economizar espaço
+# pip cache purge
+
+echo "--- Build concluído com sucesso! ---"
