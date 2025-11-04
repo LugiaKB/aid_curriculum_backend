@@ -62,3 +62,8 @@ A API retorna um JSON contendo:
 - Análise de compatibilidade com a vaga (quando fornecida)
 - Sugestões de melhorias
 - Recursos de aprendizado recomendados
+
+## Testes automatizados do tratamento de erro
+
+1. Swagger UI: http://localhost:8000/docs
+2. Rodar pipenv run python test_error_handling.py
