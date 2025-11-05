@@ -10,6 +10,7 @@ google-genai = "*"
 python-dotenv = "*"
 pydantic = {version = "*", extras = ["email, phone, full-name"]}
 email-validator = "*"
+requests = "*"
 
 [dev-packages]
 

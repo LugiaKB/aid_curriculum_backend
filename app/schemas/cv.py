@@ -37,31 +37,158 @@ class CVRequest(BaseModel):
     )
 
     @field_validator("phone")
+    @classmethod
     def validate_phone(cls, v):
         if v is None:
             return v
+        
         # Remove todos os caracteres não numéricos
         numbers_only = re.sub(r"\D", "", v)
+        
         # Verifica se o número tem entre 10 e 11 dígitos (com ou sem 9)
         if not (10 <= len(numbers_only) <= 11):
-            raise ValueError("Número de telefone deve ter 10 ou 11 dígitos")
+            raise ValueError(
+                "Número de telefone deve ter 10 ou 11 dígitos. "
+                "Exemplos válidos: (11) 99999-9999, 11999999999, 1199999999"
+            )
+        
+        # Verifica se não é uma sequência repetitiva óbvia
+        if len(set(numbers_only)) <= 2:
+            raise ValueError(
+                "Número de telefone parece inválido. "
+                "Por favor, forneça um número de telefone real."
+            )
+            
         return numbers_only
 
     @field_validator("full_name")
+    @classmethod
     def validate_name(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Nome não pode estar vazio")
+        
+        # Remove espaços extras e verifica se tem pelo menos 2 palavras
+        clean_name = " ".join(v.strip().split())
+        if len(clean_name.split()) < 2:
+            raise ValueError(
+                "Por favor, forneça nome e sobrenome completos. "
+                "Exemplo: 'Maria Silva Santos'"
+            )
+        
+        # Verifica se não contém números ou caracteres especiais
+        if re.search(r'[0-9@#$%^&*()_+=\[\]{};:"\\|,.<>?/]', clean_name):
+            raise ValueError(
+                "Nome deve conter apenas letras e espaços. "
+                "Não são permitidos números ou símbolos."
+            )
+            
+        return clean_name.title()  # Capitaliza as primeiras letras
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format(cls, v):
+        if v is None:
+            return v
+        
+        # Validação adicional para emails
+        email_str = str(v).lower().strip()
+        
+        # Verifica domínios suspeitos ou muito simples
+        common_invalid_domains = ['test.com', 'example.com', 'temp.com', 'fake.com']
+        domain = email_str.split('@')[-1] if '@' in email_str else ''
+        
+        if domain in common_invalid_domains:
+            raise ValueError(
+                "Por favor, forneça um endereço de email real e válido. "
+                f"O domínio '{domain}' não é aceito."
+            )
+            
+        return email_str
+
+    @field_validator("desired_role")
+    @classmethod
+    def validate_desired_role(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Cargo desejado não pode estar vazio")
+        
+        clean_role = v.strip()
+        if len(clean_role) < 3:
+            raise ValueError(
+                "Cargo desejado deve ter pelo menos 3 caracteres. "
+                "Exemplo: 'Desenvolvedor Python', 'Analista de Dados'"
+            )
+            
+        return clean_role.title()
+
+    @field_validator("professional_experience")
+    @classmethod
+    def validate_professional_experience(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Experiência profissional não pode estar vazia")
+        
+        clean_exp = v.strip()
+        if len(clean_exp) < 20:
+            raise ValueError(
+                "Experiência profissional deve ser mais detalhada. "
+                "Inclua informações sobre suas funções, projetos e conquistas (mínimo 20 caracteres)."
+            )
+            
+        return clean_exp
+
+    @field_validator("education")
+    @classmethod
+    def validate_education(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Formação acadêmica não pode estar vazia")
+        
+        clean_edu = v.strip()
+        if len(clean_edu) < 10:
+            raise ValueError(
+                "Formação acadêmica deve ser mais detalhada. "
+                "Inclua curso, instituição e período (mínimo 10 caracteres)."
+            )
+            
+        return clean_edu
+
+    @field_validator("skills")
+    @classmethod
+    def validate_skills(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Habilidades não podem estar vazias")
+        
+        clean_skills = v.strip()
+        if len(clean_skills) < 10:
+            raise ValueError(
+                "Liste suas habilidades de forma mais detalhada. "
+                "Inclua tecnologias, ferramentas e competências (mínimo 10 caracteres)."
+            )
+            
+        return clean_skills
         if len(v.split()) < 2:
             raise ValueError("Por favor, forneça nome e sobrenome")
         return v.title()  # Capitaliza as primeiras letras
 
     @model_validator(mode="before")
+    @classmethod
     def validate_contact(cls, data):
         if isinstance(data, dict):
             email = data.get("email")
             phone = data.get("phone")
+            
+            # Pelo menos um meio de contato deve ser fornecido
             if not email and not phone:
                 raise ValueError(
-                    "Pelo menos um meio de contato (email ou telefone) deve ser fornecido"
+                    "Pelo menos um meio de contato deve ser fornecido. "
+                    "Adicione um email válido ou número de telefone."
                 )
+                
+            # Se ambos estão vazios ou são strings vazias
+            if (email == "" or email is None) and (phone == "" or phone is None):
+                raise ValueError(
+                    "Os campos de contato não podem estar vazios. "
+                    "Preencha pelo menos o email ou telefone."
+                )
+                
         return data
 
 

@@ -1,6 +1,9 @@
 import sys
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from pydantic import ValidationError
 from app.api.routes import router
 from app.core.settings import get_settings
 
@@ -20,6 +23,60 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
+
+# Global exception handler for validation errors
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """
+    Handler global para erros de validação do FastAPI/Pydantic
+    """
+    error_messages = []
+    for error in exc.errors():
+        field = " -> ".join(str(loc) for loc in error["loc"])
+        message = error["msg"]
+        
+        # Personalizar mensagens mais amigáveis
+        if "field required" in message.lower():
+            message = "Este campo é obrigatório"
+        elif "ensure this value has at least" in message.lower():
+            message = "Este campo é muito curto"
+        elif "invalid email format" in message.lower():
+            message = "Formato de email inválido"
+            
+        error_messages.append(f"{field}: {message}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "Erro de validação",
+            "message": "Os dados fornecidos contêm erros. Verifique os campos abaixo:",
+            "details": error_messages,
+            "help": "Certifique-se de que todos os campos obrigatórios estão preenchidos corretamente."
+        }
+    )
+
+
+@app.exception_handler(ValidationError)
+async def pydantic_validation_exception_handler(request: Request, exc: ValidationError):
+    """
+    Handler específico para erros de validação do Pydantic
+    """
+    error_messages = []
+    for error in exc.errors():
+        field = " -> ".join(str(loc) for loc in error["loc"]) if error["loc"] else "dados"
+        message = error["msg"]
+        error_messages.append(f"{field}: {message}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "Erro de validação",
+            "message": "Os dados fornecidos não atendem aos critérios necessários",
+            "details": error_messages
+        }
+    )
+
 
 # Include routes
 app.include_router(router, prefix="/api/v1")
