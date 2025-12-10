@@ -32,6 +32,11 @@ class CVRequest(BaseModel):
         ..., min_length=5, description="Descrição livre das habilidades e competências"
     )
 
+    projects: Optional[str] = Field(
+        None,
+        description="Descrição livre de projetos acadêmicos ou pessoais (opcional)",
+    )
+
     target_job_description: Optional[str] = Field(
         None, description="Descrição da vaga alvo (opcional)"
     )
@@ -41,24 +46,24 @@ class CVRequest(BaseModel):
     def validate_phone(cls, v):
         if v is None:
             return v
-        
+
         # Remove todos os caracteres não numéricos
         numbers_only = re.sub(r"\D", "", v)
-        
+
         # Verifica se o número tem entre 10 e 11 dígitos (com ou sem 9)
         if not (10 <= len(numbers_only) <= 11):
             raise ValueError(
                 "Número de telefone deve ter 10 ou 11 dígitos. "
                 "Exemplos válidos: (11) 99999-9999, 11999999999, 1199999999"
             )
-        
+
         # Verifica se não é uma sequência repetitiva óbvia
         if len(set(numbers_only)) <= 2:
             raise ValueError(
                 "Número de telefone parece inválido. "
                 "Por favor, forneça um número de telefone real."
             )
-            
+
         return numbers_only
 
     @field_validator("full_name")
@@ -66,7 +71,7 @@ class CVRequest(BaseModel):
     def validate_name(cls, v):
         if not v or not v.strip():
             raise ValueError("Nome não pode estar vazio")
-        
+
         # Remove espaços extras e verifica se tem pelo menos 2 palavras
         clean_name = " ".join(v.strip().split())
         if len(clean_name.split()) < 2:
@@ -74,14 +79,14 @@ class CVRequest(BaseModel):
                 "Por favor, forneça nome e sobrenome completos. "
                 "Exemplo: 'Maria Silva Santos'"
             )
-        
+
         # Verifica se não contém números ou caracteres especiais
         if re.search(r'[0-9@#$%^&*()_+=\[\]{};:"\\|,.<>?/]', clean_name):
             raise ValueError(
                 "Nome deve conter apenas letras e espaços. "
                 "Não são permitidos números ou símbolos."
             )
-            
+
         return clean_name.title()  # Capitaliza as primeiras letras
 
     @field_validator("email")
@@ -89,20 +94,20 @@ class CVRequest(BaseModel):
     def validate_email_format(cls, v):
         if v is None:
             return v
-        
+
         # Validação adicional para emails
         email_str = str(v).lower().strip()
-        
+
         # Verifica domínios suspeitos ou muito simples
-        common_invalid_domains = ['test.com', 'example.com', 'temp.com', 'fake.com']
-        domain = email_str.split('@')[-1] if '@' in email_str else ''
-        
+        common_invalid_domains = ["test.com", "example.com", "temp.com", "fake.com"]
+        domain = email_str.split("@")[-1] if "@" in email_str else ""
+
         if domain in common_invalid_domains:
             raise ValueError(
                 "Por favor, forneça um endereço de email real e válido. "
                 f"O domínio '{domain}' não é aceito."
             )
-            
+
         return email_str
 
     @field_validator("desired_role")
@@ -110,14 +115,14 @@ class CVRequest(BaseModel):
     def validate_desired_role(cls, v):
         if not v or not v.strip():
             raise ValueError("Cargo desejado não pode estar vazio")
-        
+
         clean_role = v.strip()
         if len(clean_role) < 3:
             raise ValueError(
                 "Cargo desejado deve ter pelo menos 3 caracteres. "
                 "Exemplo: 'Desenvolvedor Python', 'Analista de Dados'"
             )
-            
+
         return clean_role.title()
 
     @field_validator("professional_experience")
@@ -125,14 +130,14 @@ class CVRequest(BaseModel):
     def validate_professional_experience(cls, v):
         if not v or not v.strip():
             raise ValueError("Experiência profissional não pode estar vazia")
-        
+
         clean_exp = v.strip()
         if len(clean_exp) < 20:
             raise ValueError(
                 "Experiência profissional deve ser mais detalhada. "
                 "Inclua informações sobre suas funções, projetos e conquistas (mínimo 20 caracteres)."
             )
-            
+
         return clean_exp
 
     @field_validator("education")
@@ -140,14 +145,14 @@ class CVRequest(BaseModel):
     def validate_education(cls, v):
         if not v or not v.strip():
             raise ValueError("Formação acadêmica não pode estar vazia")
-        
+
         clean_edu = v.strip()
         if len(clean_edu) < 10:
             raise ValueError(
                 "Formação acadêmica deve ser mais detalhada. "
                 "Inclua curso, instituição e período (mínimo 10 caracteres)."
             )
-            
+
         return clean_edu
 
     @field_validator("skills")
@@ -155,18 +160,15 @@ class CVRequest(BaseModel):
     def validate_skills(cls, v):
         if not v or not v.strip():
             raise ValueError("Habilidades não podem estar vazias")
-        
+
         clean_skills = v.strip()
         if len(clean_skills) < 10:
             raise ValueError(
                 "Liste suas habilidades de forma mais detalhada. "
                 "Inclua tecnologias, ferramentas e competências (mínimo 10 caracteres)."
             )
-            
+
         return clean_skills
-        if len(v.split()) < 2:
-            raise ValueError("Por favor, forneça nome e sobrenome")
-        return v.title()  # Capitaliza as primeiras letras
 
     @model_validator(mode="before")
     @classmethod
@@ -174,21 +176,21 @@ class CVRequest(BaseModel):
         if isinstance(data, dict):
             email = data.get("email")
             phone = data.get("phone")
-            
+
             # Pelo menos um meio de contato deve ser fornecido
             if not email and not phone:
                 raise ValueError(
                     "Pelo menos um meio de contato deve ser fornecido. "
                     "Adicione um email válido ou número de telefone."
                 )
-                
+
             # Se ambos estão vazios ou são strings vazias
             if (email == "" or email is None) and (phone == "" or phone is None):
                 raise ValueError(
                     "Os campos de contato não podem estar vazios. "
                     "Preencha pelo menos o email ou telefone."
                 )
-                
+
         return data
 
 
@@ -244,6 +246,15 @@ class ExperienceEntry(BaseModel):
     model_config = {"extra": "forbid"}
 
 
+class ProjectEntry(BaseModel):
+    name: str
+    description: str
+    technologies: List[str]
+    link: Optional[str] = None
+
+    model_config = {"extra": "forbid"}
+
+
 class EducationEntry(BaseModel):
     degree: str
     institution: str
@@ -263,6 +274,7 @@ class GeneratedCV(BaseModel):
     personal_info: PersonalInfo
     professional_summary: str
     experience_entries: List[ExperienceEntry]
+    project_entries: Optional[List[ProjectEntry]] = None  # NOVO: Lista de projetos
     education_entries: List[EducationEntry]
     skills: List[str]
     achievements: Optional[List[str]] = None
@@ -289,6 +301,14 @@ class GeneratedCV(BaseModel):
                             "Liderou equipe de 5 desenvolvedores...",
                             "Implementou CI/CD pipeline...",
                         ],
+                    }
+                ],
+                "project_entries": [
+                    {
+                        "name": "AId Curriculum Generator",
+                        "description": "API para geração de currículos usando LLM.",
+                        "technologies": ["Python", "FastAPI", "Gemini"],
+                        "link": "https://github.com/project",
                     }
                 ],
                 "education_entries": [
@@ -372,3 +392,7 @@ class CVResponse(BaseModel):
             }
         },
     }
+
+
+class RawAPIResponse(BaseModel):
+    cv_content: CVResponse

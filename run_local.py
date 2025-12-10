@@ -50,6 +50,10 @@ def main():
         Ah, e meu inglês é fluente! Leio documentação, assisto conferência e até faço 
         umas calls com cliente gringo de vez em quando.
         """,
+        projects="""
+        Desenvolvi um app de lista de tarefas para Android usando React Native e Firebase (link no GitHub).
+        Criei um modelo de classificação de imagens em Python usando TensorFlow e Keras como projeto de pós-graduação.
+        """,
         target_job_description=(
             """
         Empresa busca Desenvolvedor(a) Full Stack Sênior para atuar em projetos inovadores

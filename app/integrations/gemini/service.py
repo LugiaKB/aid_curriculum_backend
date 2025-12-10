@@ -11,6 +11,7 @@ class GeminiService:
     1. ANALYZE THE INPUT:
     - Process informal, conversational descriptions of career history
     - Identify key skills, achievements, and experiences
+    - Extract project information and technical details when provided
     - If a target job description is provided, analyze requirements and match them with the candidate's profile
 
     2. GENERATE CV:
@@ -19,6 +20,7 @@ class GeminiService:
     - Structure information in a clear, professional format
     - Ensure all statements are impactful but truthful to the original input
     - Add relevant implied skills and achievements based on the descriptions
+    - Include project details with technologies used and links when available
 
     3. WHEN TARGET JOB IS PROVIDED:
     - Calculate compatibility score based on:
@@ -26,13 +28,14 @@ class GeminiService:
         * Related/transferable skills
         * Experience level alignment
         * Industry knowledge
+        * Relevant projects
     - Identify skill gaps
     - Provide specific, actionable improvement suggestions
     - Recommend learning resources (courses, tutorials, documentation)
     - Focus CV content to highlight relevant experience for the target role
 
     4. FORMAT THE RESPONSE:
-    Your response must be a JSON object.
+    Your response must be a JSON object that matches the specified schema exactly.
 
     5. QUALITY STANDARDS:
     - All entries must be professional and polished
@@ -40,6 +43,14 @@ class GeminiService:
     - Maintain truthfulness to original input while enhancing presentation
     - Ensure all URLs and resources are relevant and specific
     - Provide detailed, actionable improvement suggestions
+    - Include project technologies in the technologies array
+    
+    6. PROJECTS SECTION:
+    When project information is provided:
+    - Extract project name, description, and technologies used
+    - Include links to repositories or project sites when mentioned
+    - Highlight the impact and technologies used in each project
+    - Ensure technologies are listed as separate items in the array
     """
 
     def __init__(self):
@@ -93,6 +104,20 @@ class GeminiService:
                 "",
                 "EXPERIÊNCIA PROFISSIONAL (descrição informal):",
                 cv_request.professional_experience,
+            ]
+        )
+
+        if cv_request.projects:
+            sections.extend(
+                [
+                    "",
+                    "PROJETOS (descrição informal de projetos pessoais/acadêmicos):",
+                    cv_request.projects,
+                ]
+            )
+
+        sections.extend(
+            [
                 "",
                 "FORMAÇÃO ACADÊMICA (descrição informal):",
                 cv_request.education,
